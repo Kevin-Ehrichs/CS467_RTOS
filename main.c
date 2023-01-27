@@ -70,10 +70,10 @@ void vvvPeriodicTask(void *pvParameters)
 
 int main()
 {
-	
-	xTaskCreate(vPeriodicTask, "My Task", 256, NULL, 1, NULL);
-	xTaskCreate(vvPeriodicTask, "My Task", 256, NULL, 1, NULL);
-	//xTaskCreate(vvvPeriodicTask, "My Task", 256, NULL, 1, NULL);
+	// Need to understand usStackDepth and how much we really need
+	xTaskCreate(vPeriodicTask, "My Task", 128, NULL, 1, NULL);
+	xTaskCreate(vvPeriodicTask, "My Task", 128, NULL, 1, NULL);
+	xTaskCreate(vvvPeriodicTask, "My Task", 128, NULL, 1, NULL);
 	
 	BSP_init();
 	
