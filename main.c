@@ -1,89 +1,36 @@
 #include <stdint.h>
-#include <FreeRTOS.h>
-#include <task.h>
-#include "bsp.h"
 
-void vPeriodicTask(void *pvParameters)
-{
-	
-	/* Establish the task's period.*/
-	const TickType_t xDelay = pdMS_TO_TICKS(1000);
-	TickType_t xLastWakeTime = xTaskGetTickCount();
-	
-	for (;;) {
-		BSP_ledGreenOn();
-		
-		/* Block until the next release time.*/
-		vTaskDelayUntil(&xLastWakeTime, xDelay);
-		
-		BSP_ledGreenOff();
-		
-	  /* Block until the next release time.*/
-		vTaskDelayUntil(&xLastWakeTime, xDelay);
-	}
+#include "board_io.h"     // for the blink functions
+#include "ticks.h"        // for resetTicks()
+#include "lm4f120h5qr.h"  // map of named hardware addresses
+//#include "masks.h"        // defined bit mask values
+#include "unicorn.h"
 
-}	
+////////////////////////////////////////////////////////////
 
-void vvPeriodicTask(void *pvParameters)
-{
-	
-	/* Establish the task's period.*/
-	const TickType_t xDelay = pdMS_TO_TICKS(1000);
-	TickType_t xLastWakeTime = xTaskGetTickCount();
-	
-	for (;;) {
-		BSP_ledBlueOn();
-		
-		/* Block until the next release time.*/
-		vTaskDelayUntil(&xLastWakeTime, xDelay);
-		
-		BSP_ledBlueOff();
-		
-	  /* Block until the next release time.*/
-		vTaskDelayUntil(&xLastWakeTime, xDelay);
-	}
-
-}	
-
-void vvvPeriodicTask(void *pvParameters)
-{
-	
-	/* Establish the task's period.*/
-	const TickType_t xDelay = pdMS_TO_TICKS(1000);
-	TickType_t xLastWakeTime = xTaskGetTickCount();
-	
-	for (;;) {
-		BSP_ledRedOn();
-		
-		/* Block until the next release time.*/
-		vTaskDelayUntil(&xLastWakeTime, xDelay);
-		
-		BSP_ledRedOff();
-		
-	  /* Block until the next release time.*/
-		vTaskDelayUntil(&xLastWakeTime, xDelay);
-	}
-
-}	
-
+#include <intrinsics.h>
 
 
 int main()
-{
-	// Need to understand usStackDepth and how much we really need
-	xTaskCreate(vPeriodicTask, "My Task", 128, NULL, 1, NULL);
-	xTaskCreate(vvPeriodicTask, "My Task", 128, NULL, 1, NULL);
-	xTaskCreate(vvvPeriodicTask, "My Task", 128, NULL, 1, NULL);
-	
-	BSP_init();
-	
-	BSP_ledGreenOn();
+{ 
+  // un-gateclock GPIOF AHB, set digital/direction , set Systick, set SysTck/PendSV priorities
+  boardStartup();
+  
+  //OS stuff
+  initializeScheduler();
+  
+  //***start tasks here***
+  readyNewTask(&blinkRed);
+  readyNewTask(&blinkBlue);
+  readyNewTask(&blinkGreen);
+  
+  resetTicks(); //set starting number of ticks to 0
 
-	/* Startup of the FreeRTOS scheduler.  The program should block here.  */
-	vTaskStartScheduler();
-	
-	/* The following line should never be reached.  Failure to allocate enough
-	  	memory from the heap would be one reason.*/
-	for (;;);
-	
+  __asm("CPSIE I"); //enable interrupts
+  
+  //***from this point, the systick interrupt handler will begin executing and will cause scheduling of processes**
+  
+  while(1);
+
+  //return 0;
 }
