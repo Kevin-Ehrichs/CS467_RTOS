@@ -5,13 +5,13 @@
 
 //system control
 
-#define OPEN_GPIOF_CLOCK_GATE_MASK              0b00100000U //OR with SYSCTL_RCGCGPIO_R to open clock gating to GPIO port F
-#define CLOSE_GPIOF_CLOCK_GATE_MASK             0b11011111U //AND with SYSCTL_RCGCGPIO_R to close clock gating to GPIO port F
+#define OPEN_GPIOF_CLOCK_GATE_MASK            0b00100000U //OR with SYSCTL_RCGCGPIO_R to open clock gating to GPIO port F
+#define CLOSE_GPIOF_CLOCK_GATE_MASK           0b11011111U //AND with SYSCTL_RCGCGPIO_R to close clock gating to GPIO port F
 
 //gpio control
 
-#define SET_GPIO_PIN_TO_OUTPUT_MASK             0b00001110U //OR with GPIO_PORTF_DIR_R to set specified pins direction as output
-#define SET_GPIO_PIN_TO_DIGITAL_MASK            0b00001110U //OR with GPIO_PORTF_DEN_R to set specified pins as digital
+#define SET_GPIO_PIN_TO_OUTPUT_MASK           0b00001110U //OR with GPIO_PORTF_DIR_R to set specified pins direction as output
+#define SET_GPIO_PIN_TO_DIGITAL_MASK          0b00001110U //OR with GPIO_PORTF_DEN_R to set specified pins as digital
 
 //general purpose
 

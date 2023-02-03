@@ -3,13 +3,13 @@
 
 #include <stdint.h>
 
-#define TASK_STACK_WORD_SIZE 64U //later this will not be a constant value
-#define BYTES_PER_WORD 4U //for 32 bit architecture
-#define MAX_TASKS 8U
+#define TASK_STACK_WORD_SIZE 64U     // later this will not be a constant value
+#define BYTES_PER_WORD       4U      // for 32 bit architecture
+#define MAX_TASKS            8U
 
-#define TASK_STATE_DORMANT 0U
-#define TASK_STATE_READY 1U
-#define TASK_STATE_ACTIVE 2U
+#define TASK_STATE_DORMANT   0U
+#define TASK_STATE_READY     1U
+#define TASK_STATE_ACTIVE    2U
 
 /*** note: the ARM Application Procedure Call Standard (AAPCS) disallows
     clobbering of registers R4 through R11. I believe this means the compiler
@@ -81,10 +81,10 @@ extern Task* nextTask; //initialized in tbc.c
 
 /*** Scheduling Stuff ***/
 
-//the defaultTask's job
+//the idleTask's job
 void pointlessWork();
 
-//starting setup of the task table, default task
+//starting setup of the task table, idleTask
 void initializeScheduler();
 
 //initializes a new Task and marks it as ready to run

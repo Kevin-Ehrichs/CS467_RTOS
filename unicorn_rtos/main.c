@@ -1,9 +1,9 @@
 #include <stdint.h>
 
-#include "board_io.h" //for the blink functions
-#include "ticks.h" //for resetTicks()
-#include "lm4f120h5qr.h" //map of named hardware addresses
-#include "masks.h" //defined bit mask values
+#include "board_io.h"     // for the blink functions
+#include "ticks.h"        // for resetTicks()
+#include "lm4f120h5qr.h"  // map of named hardware addresses
+#include "masks.h"        // defined bit mask values
 #include "unicorn.h"
 
 
@@ -18,12 +18,12 @@ int main()
   GPIO_PORTF_DEN_R |= SET_GPIO_PIN_TO_DIGITAL_MASK; //set GPIO port F pins' type to digital  
   
   //systick stuff
-  NVIC_ST_RELOAD_R = (uint32_t)1000000U; //set interval between systick interrupts (in clock cycles), I believe clock speed is 16 million cycles per second so this would be 16 interrupts per second
-  NVIC_ST_CURRENT_R = (uint32_t)0; //clear on write (so clears the counter value)
-  NVIC_ST_CTRL_R = (uint32_t)0b00000111U; //clock source, interrupt enable, counter enable
+  NVIC_ST_RELOAD_R = (uint32_t)1000000U;     //set interval between systick interrupts (in clock cycles), I believe clock speed is 16 million cycles per second so this would be 16 interrupts per second
+  NVIC_ST_CURRENT_R = (uint32_t)0;           //clear on write (so clears the counter value)
+  NVIC_ST_CTRL_R = (uint32_t)0b00000111U;    //clock source, interrupt enable, counter enable
 
   //exception handler preemption priorty stuff
-  NVIC_SYS_PRI3_R = 0x00FF0000U; //has the effect of setting pendsv to lowest priorty, systick, RESERVED, and monitor interrupts to highest priority
+  NVIC_SYS_PRI3_R = 0x00FF0000U;             //has the effect of setting pendsv to lowest priorty, systick, RESERVED, and monitor interrupts to highest priority
       
       
   //OS stuff
@@ -42,5 +42,5 @@ int main()
   
   while(1);
 
-  return 0;
+  //return 0;
 }
