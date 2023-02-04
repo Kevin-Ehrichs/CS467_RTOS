@@ -1,7 +1,7 @@
 #include "unicorn.h"
 
 
-Task defaultTask;
+Task idleTask;
 Task taskTable[MAX_TASKS];
 Task* currentTask; //must be here because it gets labelled for easier access in assembly code
 Task* nextTask; //must be here because it gets labelled for easier access in assembly code
@@ -53,13 +53,13 @@ void pointlessWork()
   while(1);
 }
 
-//starting setup of the task table, default task
+//starting setup of the task table, idle task
 void initializeScheduler()
 {
   for(int i = 0; i < MAX_TASKS; ++i)
     taskTable[i].state = TASK_STATE_DORMANT;
   
-  initializeTask(&defaultTask, &pointlessWork);
+  initializeTask(&idleTask, &pointlessWork);
   
   currentTask = (Task*)0U;
   nextTask = (Task*)0U;
@@ -100,23 +100,23 @@ void sched()
 
   if(readyTaskCount == 0)
   {
-    currentTask = &defaultTask;
-    nextTask = &defaultTask;
+    currentTask = &idleTask;
+    nextTask = &idleTask;
   }
 
-  else if (activeTaskIndex == -1) //current task is the default task and other task(s) ready to run
+  else if (activeTaskIndex == -1) //current task is the idleTask and other task(s) ready to run
   {
     for(i = 0; i < MAX_TASKS; ++i)
     {
       if(taskTable[i].state == TASK_STATE_READY)
         break;
     }
-    currentTask = &defaultTask;
+    currentTask = &idleTask;
     nextTask = &(taskTable[i]);
     nextTask->state = TASK_STATE_ACTIVE;
   }
   
-  else //active task is not the default task
+  else //active task is not the idleTask
   {
     //find the ready task which is "next in line"
     i = activeTaskIndex + 1;
