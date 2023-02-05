@@ -3,7 +3,9 @@
 #include <task.h>
 #include "bsp.h"
 
-void vPeriodicTask(void *pvParameters)
+/* Task Definitions */
+
+void redLEDTask(void *pvParameters)
 {
 	
 	/* Establish the task's period.*/
@@ -11,20 +13,17 @@ void vPeriodicTask(void *pvParameters)
 	TickType_t xLastWakeTime = xTaskGetTickCount();
 	
 	for (;;) {
-		BSP_ledGreenOn();
 		
-		/* Block until the next release time.*/
+		BSP_setLED(LED_RED, ON);
 		vTaskDelayUntil(&xLastWakeTime, xDelay);
-		
-		BSP_ledGreenOff();
-		
-	  /* Block until the next release time.*/
+
+		BSP_setLED(LED_RED, OFF);
 		vTaskDelayUntil(&xLastWakeTime, xDelay);
 	}
 
 }	
 
-void vvPeriodicTask(void *pvParameters)
+void blueLEDTask(void *pvParameters)
 {
 	
 	/* Establish the task's period.*/
@@ -32,20 +31,16 @@ void vvPeriodicTask(void *pvParameters)
 	TickType_t xLastWakeTime = xTaskGetTickCount();
 	
 	for (;;) {
-		BSP_ledBlueOn();
-		
-		/* Block until the next release time.*/
+		BSP_setLED(LED_BLUE, ON);
 		vTaskDelayUntil(&xLastWakeTime, xDelay);
 		
-		BSP_ledBlueOff();
-		
-	  /* Block until the next release time.*/
+		BSP_setLED(LED_BLUE, OFF);
 		vTaskDelayUntil(&xLastWakeTime, xDelay);
 	}
 
 }	
 
-void vvvPeriodicTask(void *pvParameters)
+void greenLEDTask(void *pvParameters)
 {
 	
 	/* Establish the task's period.*/
@@ -53,14 +48,10 @@ void vvvPeriodicTask(void *pvParameters)
 	TickType_t xLastWakeTime = xTaskGetTickCount();
 	
 	for (;;) {
-		BSP_ledRedOn();
-		
-		/* Block until the next release time.*/
+		BSP_setLED(LED_GREEN, ON);
 		vTaskDelayUntil(&xLastWakeTime, xDelay);
 		
-		BSP_ledRedOff();
-		
-	  /* Block until the next release time.*/
+		BSP_setLED(LED_GREEN, OFF);
 		vTaskDelayUntil(&xLastWakeTime, xDelay);
 	}
 
@@ -70,14 +61,15 @@ void vvvPeriodicTask(void *pvParameters)
 
 int main()
 {
-	// Need to understand usStackDepth and how much we really need
-	xTaskCreate(vPeriodicTask, "My Task", 128, NULL, 1, NULL);
-	xTaskCreate(vvPeriodicTask, "My Task", 128, NULL, 1, NULL);
-	xTaskCreate(vvvPeriodicTask, "My Task", 128, NULL, 1, NULL);
+	/* Need to understand usStackDepth and how much we really need */
+	/* 32 seems to be minimum for current task implementation      */
+	xTaskCreate(redLEDTask, "RED LED", 32, NULL, 1, NULL);
+	
+	xTaskCreate(blueLEDTask, "BLUE LED", 32, NULL, 1, NULL);
+	
+	xTaskCreate(greenLEDTask, "GREEN LED", 32, NULL, 1, NULL);
 	
 	BSP_init();
-	
-	BSP_ledGreenOn();
 
 	/* Startup of the FreeRTOS scheduler.  The program should block here.  */
 	vTaskStartScheduler();
