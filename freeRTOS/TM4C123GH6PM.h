@@ -31,6 +31,13 @@
  *
  *******************************************************************************************************/
 
+/***!!! This file is modified for use in the CS467 RTOS Analysis and Developement Course project !!!***/
+/***!!!     The modification is as follows and makes use																				 !!!***/
+/***!!!     of a "RESERVED" struct member that was not                                           !!!***/ 
+/***!!!     previously being used                                                                !!!***/   
+
+/***!!!     The GPIOA_Type Struct definition now contains a member of type __IO named DATA_BITS  !!!***/
+/***!!!     The previous definition of RESERVED is no longer present                             !!!***/
 
 
 /** @addtogroup Texas Instruments
@@ -229,7 +236,7 @@ typedef struct {                                    /*!< WATCHDOG0 Structure    
   */
 
 typedef struct {                                    /*!< GPIOA Structure                                                       */
-  __IO  uint32_t  DATA_Bits[255];
+  __IO uint32_t  DATA_Bits[255];										/*!< GPIO positions                                                        */
   __IO uint32_t  DATA;                              /*!< GPIO Data                                                             */
   __IO uint32_t  DIR;                               /*!< GPIO Direction                                                        */
   __IO uint32_t  IS;                                /*!< GPIO Interrupt Sense                                                  */
