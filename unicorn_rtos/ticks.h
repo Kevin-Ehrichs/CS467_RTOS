@@ -3,8 +3,9 @@
 
 #include <stdint.h>
 
-static uint32_t volatile ticksElapsed; //static makes it retain its value, volatile means it can be modified at any time
-
+ //static sets scope to file level;  volatile means compiler won't modify it w/optimization
+#define SYSTICKS_PER_SEC 1000;
+static uint32_t volatile ticksElapsed;
 void resetTicks(void);
 
 uint32_t getTicks(void);

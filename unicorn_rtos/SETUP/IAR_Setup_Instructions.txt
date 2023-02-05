@@ -1,0 +1,9 @@
+1) Start a new IAR project (c/main)
+2) Copy all the files/folders from the unicorn_rtos directory in this repo
+	and paste them into the project folder (overwriting main.c).
+3) In project -> options:
+	A) General Options -> Target tab -> Device -> TexasInstruments LM4F120H5QR
+	B) General Options -> 32-bit tab -> FPU -> None
+	C) C/C++ Compiler -> Preprocessor tab -> Additional include directories field
+		-> add "$PROJ_DIR$\CMSIS\Include"
+	D) Debugger -> Driver -> TI Stellaris
