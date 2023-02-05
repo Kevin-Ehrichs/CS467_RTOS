@@ -1,6 +1,7 @@
 #include <stdint.h>
 
 #include "board_io.h"     // for the blink functions
+#include "bsp.h"
 #include "ticks.h"        // for resetTicks()
 #include "lm4f120h5qr.h"  // map of named hardware addresses
 //#include "masks.h"        // defined bit mask values
@@ -14,7 +15,7 @@
 int main()
 { 
   // un-gateclock GPIOF AHB, set digital/direction , set Systick, set SysTck/PendSV priorities
-  boardStartup();
+  BSP_init();
   
   //OS stuff
   initializeScheduler();
