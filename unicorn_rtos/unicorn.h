@@ -68,8 +68,8 @@ void initializeFirstFrame(ContextFrame*, EntryFunction);
 typedef struct
 {
   uint32_t* sp; //stack pointer
-  uint32_t stack[TASK_STACK_WORD_SIZE]; //memory allocation for the stack - ***later this will be alocated outside this struct and passed in via a pointer***
-  uint8_t state;
+  uint32_t  stack[TASK_STACK_WORD_SIZE]; //memory allocation for the stack - ***later this will be alocated outside this struct and passed in via a pointer***
+  uint8_t   state;
 } Task;
 
 //set's up a Task's initial stack and member variables

@@ -2,7 +2,8 @@
 
 #include "board_io.h"     // for the blink functions
 #include "ticks.h"        // for resetTicks()
-#include "lm4f120h5qr.h"  // map of named hardware addresses
+#include "TM4C123GH6PM.h" // map of named hardware addresses
+
 //#include "masks.h"        // defined bit mask values
 #include "unicorn.h"
 

@@ -1,10 +1,12 @@
 #include "board_io.h"
-#include "lm4f120h5qr.h" //map of named hardware addresses
-#include "masks.h" //defined bit mask values
+
+//#include "lm4f120h5qr.h" //map of named hardware addresses
+// #include "masks.h" //defined bit mask values
 #include "TM4C123GH6PM.h"
+//#include "core_cm4.h"
 
 const int BLINKY_MAX = 2000;
-#define SYSTICKS_PER_SEC 1000;
+
 
 void boardStartup(void)
 {
@@ -23,18 +25,18 @@ void boardStartup(void)
   __DSB(); //Data Memory Barrier 
   
   //systick stuff
-  //SystemCoreClockUpdate();
-  //SysTick_Config(SystemCoreClock / SYSTICKS_PER_SEC);
-
-  NVIC_ST_RELOAD_R = (uint32_t)1000000U;     //set interval between systick interrupts (in clock cycles), I believe clock speed is 16 million cycles per second so this would be 16 interrupts per second
-  NVIC_ST_CURRENT_R = (uint32_t)0;           //clear on write (so clears the counter value)
-  NVIC_ST_CTRL_R = (uint32_t)0b00000111U;    //clock source, interrupt enable, counter enable
-
+  // register abstractions in core_cm4h.h (CMSIS directory)
+  SysTick->LOAD = (uint32_t)1000000U;
+  SysTick->VAL  = 0U;                          //clear on write (so clears the counter value)
+  SysTick->CTRL = (uint32_t)0b00000111U;    //clock source, interrupt enable, counter enable in 'multi-shot' (repeating mode)
+  
   //exception handler preemption priorty stuff
   //has the effect of setting pendsv to lowest priorty, 
   // RESERVED, and monitor interrupts to highest priority
-      
-  NVIC_SYS_PRI3_R = 0x00FF0000U;             
+  // *** couldn't find the TM4c123GH6PM.h equivalent of this lm4f120h5qr.h register abstraction, so I hardcoded it
+    // NVIC_SYS_PRI3_R = 0x00FF0000U;    
+  (*((volatile unsigned long *)0xE000ED20)) = 0x00FF0000U;
+  
 }
     
 
@@ -48,12 +50,12 @@ void blinkRed()
     int offset = BLINKY_MAX;
     while(1)
     {
-      GPIO_PORTF_AHB_DATA_BITS_R[RED] = BYTE_BIT_ALL; //turn color on
+      GPIOF_AHB->DATA_Bits[RED] = RED; //turn color on
       int i = -BLINKY_MAX;
       while(i < offset)
         ++i;        
 
-      GPIO_PORTF_AHB_DATA_BITS_R[RED] = BYTE_BIT_NONE; //turn color off
+      GPIOF_AHB->DATA_Bits[RED] = OFF; //turn color off
       i = offset;
       while(i < BLINKY_MAX)
         ++i;        
@@ -71,12 +73,12 @@ void blinkBlue()
     int offset = 0;
     while(1)
     {
-      GPIO_PORTF_AHB_DATA_BITS_R[BLUE] = BYTE_BIT_ALL; //turn color on
+      GPIOF_AHB->DATA_Bits[BLUE] = GREEN; //turn color on
       int i = -BLINKY_MAX;
       while(i < offset)
         ++i;        
 
-      GPIO_PORTF_AHB_DATA_BITS_R[BLUE] = BYTE_BIT_NONE; //turn color off
+      GPIOF_AHB->DATA_Bits[BLUE] = OFF; //turn color off
       i = offset;
       while(i < BLINKY_MAX)
         ++i;  
@@ -94,12 +96,12 @@ void blinkGreen()
     int offset = -BLINKY_MAX;
     while(1)
     {
-      GPIO_PORTF_AHB_DATA_BITS_R[GREEN] = BYTE_BIT_ALL; //turn color on
+      GPIOF_AHB->DATA_Bits[GREEN] = GREEN; //turn color on
       int i = -BLINKY_MAX;
       while(i < offset)
         ++i;        
 
-      GPIO_PORTF_AHB_DATA_BITS_R[GREEN] = BYTE_BIT_NONE; //turn color off
+      GPIOF_AHB->DATA_Bits[GREEN] = OFF; //turn color off
       i = offset;
       while(i < BLINKY_MAX)
         ++i;  
