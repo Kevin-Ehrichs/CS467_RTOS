@@ -1,2 +1,4 @@
-# CS467_RTOS
-Repository holding our project files for CS467 - RTOS 
+# CS467 RTOS Developement and Analysis 
+## freeRTOS implementation on the Tiva C Launchpad housing the TM4C123GH6PM Micro Controller
+
+ - Implemented using Keil uVision5 Code Limited Version
