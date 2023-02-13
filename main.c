@@ -1,10 +1,36 @@
+/****************************************************************************************************//**
+ * @file     main.c
+ *
+ * @brief    freeRTOS Implementation on the TivaC Launchpad (TM4C123GH6PM)
+ *
+ * @date     10 Feb. 2023
+ *
+ *******************************************************************************************************/
 #include <stdint.h>
 #include <FreeRTOS.h>
 #include <task.h>
 #include "bsp.h"
 
-/* Task Definitions */
+/**** TASK DEFINITIONS ****/
 
+/* Toggle the PB3 pin at 3 second intervals */
+void extraGPIOTask(void *pvParameters)
+{
+		/* Establish the task's period.*/
+	const TickType_t xDelay = pdMS_TO_TICKS(3000);
+	TickType_t xLastWakeTime = xTaskGetTickCount();
+	
+	for (;;) {
+		
+		BSP_setGPIO(GPIOB_AHB, GPIO_PB3, HIGH);
+		vTaskDelayUntil(&xLastWakeTime, xDelay);
+
+    BSP_setGPIO(GPIOB_AHB, GPIO_PB3, LOW);
+		vTaskDelayUntil(&xLastWakeTime, xDelay);
+	}
+}
+
+/* Blink red LED - 1 second intervals */
 void redLEDTask(void *pvParameters)
 {
 	
@@ -20,9 +46,9 @@ void redLEDTask(void *pvParameters)
 		BSP_setLED(LED_RED, OFF);
 		vTaskDelayUntil(&xLastWakeTime, xDelay);
 	}
-
 }	
 
+/* Blink blue LED - 1 second intervals */
 void blueLEDTask(void *pvParameters)
 {
 	
@@ -37,9 +63,9 @@ void blueLEDTask(void *pvParameters)
 		BSP_setLED(LED_BLUE, OFF);
 		vTaskDelayUntil(&xLastWakeTime, xDelay);
 	}
-
 }	
 
+/* Blink green LED - 1 second intervals */
 void greenLEDTask(void *pvParameters)
 {
 	
@@ -54,9 +80,7 @@ void greenLEDTask(void *pvParameters)
 		BSP_setLED(LED_GREEN, OFF);
 		vTaskDelayUntil(&xLastWakeTime, xDelay);
 	}
-
 }	
-
 
 
 int main()
@@ -69,6 +93,9 @@ int main()
 	
 	xTaskCreate(greenLEDTask, "GREEN LED", 32, NULL, 1, NULL);
 	
+	xTaskCreate(extraGPIOTask, "Extra GPIO", 32, NULL, 1, NULL);
+	
+	/* Initialize board level components inlcuding GPIO */
 	BSP_init();
 
 	/* Startup of the FreeRTOS scheduler.  The program should block here.  */
@@ -77,5 +104,4 @@ int main()
 	/* The following line should never be reached.  Failure to allocate enough
 	  	memory from the heap would be one reason.*/
 	for (;;);
-	
 }
