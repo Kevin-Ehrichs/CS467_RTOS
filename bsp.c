@@ -26,16 +26,16 @@ void BSP_init(void) {
     __ISB(); /* Instruction Synchronization Barrier */
     __DSB(); /* Data Memory Barrier */
 
-    GPIOF_AHB->DIR |= (GPIO_PF1 | GPIO_PF2 | GPIO_PF3); /* Set GPIOs used in F rail as outputs */
-		GPIOB_AHB->DIR |= (GPIO_PB3);
-		GPIOC_AHB->DIR |= (GPIO_PC4 | GPIO_PC5 | GPIO_PC6 | GPIO_PC7);
-		GPIOD_AHB->DIR |= (GPIO_PD6 | GPIO_PD7);
+    GPIOF_AHB->DIR |= (GPIO_PF1 | GPIO_PF2 | GPIO_PF3);            /* Set GPIOs used in F rail as outputs */
+		GPIOB_AHB->DIR |= (GPIO_PB3);                                  /* Set GPIOs used in B rail as outputs */
+		GPIOC_AHB->DIR |= (GPIO_PC4 | GPIO_PC5 | GPIO_PC6 | GPIO_PC7); /* Set GPIOs used in C rail as outputs */
+		GPIOD_AHB->DIR |= (GPIO_PD6 | GPIO_PD7);                       /* Set GPIOs used in D rail as outputs */
 		
 		
-    GPIOF_AHB->DEN |= (GPIO_PF1 | GPIO_PF2 | GPIO_PF3); /* Enable GPIOs used in F rail */
-		GPIOB_AHB->DEN |= (GPIO_PB3);
-		GPIOC_AHB->DEN |= (GPIO_PC4 | GPIO_PC5 | GPIO_PC6 | GPIO_PC7);
-		GPIOD_AHB->DEN |= (GPIO_PD6 | GPIO_PD7);
+    GPIOF_AHB->DEN |= (GPIO_PF1 | GPIO_PF2 | GPIO_PF3);            /* Enable GPIOs used in F rail */
+		GPIOB_AHB->DEN |= (GPIO_PB3);                                  /* Enable GPIOs used in B rail */
+		GPIOC_AHB->DEN |= (GPIO_PC4 | GPIO_PC5 | GPIO_PC6 | GPIO_PC7); /* Enable GPIOs used in C rail */
+		GPIOD_AHB->DEN |= (GPIO_PD6 | GPIO_PD7);                       /* Enable GPIOs used in D rail */
 
     SystemCoreClockUpdate();
     SysTick_Config(SystemCoreClock / BSP_TICKS_PER_SEC);
@@ -43,61 +43,19 @@ void BSP_init(void) {
     __enable_irq();
 }
 
-/* Abstraction for setting the state of a GPIO on Rail F */
-/* param GPIO, the GPIO being set (GPIO_PFx) */
-/* param state, HIGH or LOW                   */
-void writeGPIOF_Pin(uint8_t GPIO, uint8_t state){
-	   
-		if(state == 1){ /* Set high */
-			GPIOF_AHB->DATA_Bits[GPIO] = GPIO;	
+/* Abstraction for setting the state of a GPIO on the TivaC Launchpad Board */
+/* param GPIOx, the GPIO typedef ex. GPIOF_AHB                              */
+/* param Pin, the GPIO being set ex. GPIO_PF1                               */
+/* param PinState, HIGH or LOW                                              */
+void BSP_setGPIO(GPIOA_Type* GPIOx, uint8_t Pin, GPIO_PinState PinState)
+{
+		if(PinState == HIGH){ /* Set high */
+			GPIOx->DATA_Bits[Pin] = Pin;	
 		}
 		else{ /*  all other conditions set low */
-			GPIOF_AHB->DATA_Bits[GPIO] = 0U;	
+			GPIOx->DATA_Bits[Pin] = LOW;	
 		}
 }
-
-/* Abstraction for setting the state of a GPIO on Rail B */
-/* param GPIO, the GPIO being set (GPIO_PFx)  */
-/* param state, HIGH or LOW                   */
-void writeGPIOB_Pin(uint8_t GPIO, uint8_t state){
-	   
-		if(state == 1){ /* Set high */
-			GPIOB_AHB->DATA_Bits[GPIO] = GPIO;	
-		}
-		else{ /*  all other conditions set low */
-			GPIOB_AHB->DATA_Bits[GPIO] = 0U;	
-		}
-}
-
-/* Abstraction for setting the state of a GPIO on Rail C */
-/* param GPIO, the GPIO being set (GPIO_PFx)  */
-/* param state, HIGH or LOW                   */
-void writeGPIOC_Pin(uint8_t GPIO, uint8_t state){
-	   
-		if(state == 1){ /* Set high */
-			GPIOC_AHB->DATA_Bits[GPIO] = GPIO;	
-		}
-		else{ /*  all other conditions set low */
-			GPIOC_AHB->DATA_Bits[GPIO] = 0U;	
-		}
-}
-
-/* Abstraction for setting the state of a GPIO on Rail D */
-/* param GPIO, the GPIO being set (GPIO_PFx)  */
-/* param state, HIGH or LOW                   */
-void writeGPIOD_Pin(uint8_t GPIO, uint8_t state){
-	   
-		if(state == 1){ /* Set high */
-			GPIOD_AHB->DATA_Bits[GPIO] = GPIO;	
-		}
-		else{ /*  all other conditions set low */
-			GPIOD_AHB->DATA_Bits[GPIO] = 0U;	
-		}
-}
-
-
-
-
 
 
 /* Abstraction for setting the state of an LED on the TivaC Launchpad Board */
@@ -105,5 +63,5 @@ void writeGPIOD_Pin(uint8_t GPIO, uint8_t state){
 /* param state, ON or Off  */
 void BSP_setLED(uint8_t led, uint8_t state)
 {
-	writeGPIOF_Pin(led, state);
+	BSP_setGPIO(GPIOF_AHB, led, state);
 }

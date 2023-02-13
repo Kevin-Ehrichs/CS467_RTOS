@@ -11,24 +11,26 @@
 #include <task.h>
 #include "bsp.h"
 
+/**** TASK DEFINITIONS ****/
+
+/* Toggle the PB3 pin at 3 second intervals */
 void extraGPIOTask(void *pvParameters)
 {
 		/* Establish the task's period.*/
-	const TickType_t xDelay = pdMS_TO_TICKS(1000);
+	const TickType_t xDelay = pdMS_TO_TICKS(3000);
 	TickType_t xLastWakeTime = xTaskGetTickCount();
 	
 	for (;;) {
 		
-		writeGPIOC_Pin(GPIO_PC4, HIGH);
+		BSP_setGPIO(GPIOB_AHB, GPIO_PB3, HIGH);
 		vTaskDelayUntil(&xLastWakeTime, xDelay);
 
-		writeGPIOC_Pin(GPIO_PC4, LOW);
+    BSP_setGPIO(GPIOB_AHB, GPIO_PB3, LOW);
 		vTaskDelayUntil(&xLastWakeTime, xDelay);
 	}
-	
 }
 
-/* Task Definitions */
+/* Blink red LED - 1 second intervals */
 void redLEDTask(void *pvParameters)
 {
 	
@@ -44,9 +46,9 @@ void redLEDTask(void *pvParameters)
 		BSP_setLED(LED_RED, OFF);
 		vTaskDelayUntil(&xLastWakeTime, xDelay);
 	}
-
 }	
 
+/* Blink blue LED - 1 second intervals */
 void blueLEDTask(void *pvParameters)
 {
 	
@@ -63,6 +65,7 @@ void blueLEDTask(void *pvParameters)
 	}
 }	
 
+/* Blink green LED - 1 second intervals */
 void greenLEDTask(void *pvParameters)
 {
 	

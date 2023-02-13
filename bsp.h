@@ -9,12 +9,19 @@
 #define BSP_TICKS_PER_SEC 1000U
 
 /* LED States */
-#define ON    1U
-#define OFF   0U
+typedef enum
+{
+  OFF = 0U,
+  ON
+}GPIO_LEDState;
 
 /* GPIO Pin States */
-#define HIGH  1U
-#define LOW   0U  
+typedef enum
+{
+  LOW = 0U,
+  HIGH
+}GPIO_PinState;
+
 
 /* GPIO Rail Bit Fields */
 #define GPIOF_BF  (1U << 5) /* GPIOF */
@@ -41,7 +48,6 @@
 #define GPIO_PD7  (1u << 7)
 
 
-
 /* on-board LEDs */
 #define LED_RED   GPIO_PF1
 #define LED_BLUE  GPIO_PF2
@@ -49,12 +55,7 @@
 
 /* prototypes */
 void BSP_init(void);
-
-void writeGPIOF_Pin(uint8_t GPIO, uint8_t state);
-void writeGPIOB_Pin(uint8_t GPIO, uint8_t state);
-void writeGPIOC_Pin(uint8_t GPIO, uint8_t state);
-void writeGPIOD_Pin(uint8_t GPIO, uint8_t state);
-
+void BSP_setGPIO(GPIOA_Type* GPIOx, uint8_t Pin, GPIO_PinState PinState);
 void BSP_setLED(uint8_t led, uint8_t state);
 
 #endif // __BSP_H__
