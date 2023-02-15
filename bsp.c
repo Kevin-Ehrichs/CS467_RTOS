@@ -14,11 +14,11 @@ void BSP_init(void) {
 	
 		/* Enable Run mode for the following GPIO Rails */
 	  /* TM4C123GXL_datasheet - pg. 340 - Register 60 - General-Purpose Input/Output Run Mode Clock Gating Control (RCGCGPIO) */
-	  SYSCTL->RCGCGPIO  |= (GPIOF_BF | GPIOB_BF | GPIOC_BF | GPIOD_BF);
+    SYSCTL->RCGCGPIO  |= (GPIOF_BF | GPIOB_BF | GPIOC_BF | GPIOD_BF);
 	
 		/* Connect the GPIO rails to the high performance AHB bus */
 		/* TM4C123GXL_datasheet - pg. 258 - Register 9 - GPIO High-Performance Bus Control (GPIOHBCTL) */
-	  SYSCTL->GPIOHBCTL |= (GPIOF_BF | GPIOB_BF | GPIOC_BF | GPIOD_BF);
+    SYSCTL->GPIOHBCTL |= (GPIOF_BF | GPIOB_BF | GPIOC_BF | GPIOD_BF);
 
 
     /* make sure the Run Mode and AHB-enable take effects
@@ -27,15 +27,15 @@ void BSP_init(void) {
     __DSB(); /* Data Memory Barrier */
 
     GPIOF_AHB->DIR |= (GPIO_PF1 | GPIO_PF2 | GPIO_PF3);            /* Set GPIOs used in F rail as outputs */
-		GPIOB_AHB->DIR |= (GPIO_PB3);                                  /* Set GPIOs used in B rail as outputs */
-		GPIOC_AHB->DIR |= (GPIO_PC4 | GPIO_PC5 | GPIO_PC6 | GPIO_PC7); /* Set GPIOs used in C rail as outputs */
-		GPIOD_AHB->DIR |= (GPIO_PD6 | GPIO_PD7);                       /* Set GPIOs used in D rail as outputs */
+    GPIOB_AHB->DIR |= (GPIO_PB3);                                  /* Set GPIOs used in B rail as outputs */
+    GPIOC_AHB->DIR |= (GPIO_PC4 | GPIO_PC5 | GPIO_PC6 | GPIO_PC7); /* Set GPIOs used in C rail as outputs */
+    GPIOD_AHB->DIR |= (GPIO_PD6 | GPIO_PD7);                       /* Set GPIOs used in D rail as outputs */
 		
 		
     GPIOF_AHB->DEN |= (GPIO_PF1 | GPIO_PF2 | GPIO_PF3);            /* Enable GPIOs used in F rail */
-		GPIOB_AHB->DEN |= (GPIO_PB3);                                  /* Enable GPIOs used in B rail */
-		GPIOC_AHB->DEN |= (GPIO_PC4 | GPIO_PC5 | GPIO_PC6 | GPIO_PC7); /* Enable GPIOs used in C rail */
-		GPIOD_AHB->DEN |= (GPIO_PD6 | GPIO_PD7);                       /* Enable GPIOs used in D rail */
+    GPIOB_AHB->DEN |= (GPIO_PB3);                                  /* Enable GPIOs used in B rail */
+    GPIOC_AHB->DEN |= (GPIO_PC4 | GPIO_PC5 | GPIO_PC6 | GPIO_PC7); /* Enable GPIOs used in C rail */
+    GPIOD_AHB->DEN |= (GPIO_PD6 | GPIO_PD7);                       /* Enable GPIOs used in D rail */
 
     SystemCoreClockUpdate();
     SysTick_Config(SystemCoreClock / BSP_TICKS_PER_SEC);
@@ -49,12 +49,12 @@ void BSP_init(void) {
 /* param PinState, HIGH or LOW                                              */
 void BSP_setGPIO(GPIOA_Type* GPIOx, uint8_t Pin, GPIO_PinState PinState)
 {
-		if(PinState == HIGH){ /* Set high */
-			GPIOx->DATA_Bits[Pin] = Pin;	
-		}
-		else{ /*  all other conditions set low */
-			GPIOx->DATA_Bits[Pin] = LOW;	
-		}
+    if(PinState == HIGH){ /* Set high */
+        GPIOx->DATA_Bits[Pin] = Pin;	
+    }
+    else{ /*  all other conditions set low */
+        GPIOx->DATA_Bits[Pin] = LOW;	
+    }
 }
 
 
@@ -63,5 +63,5 @@ void BSP_setGPIO(GPIOA_Type* GPIOx, uint8_t Pin, GPIO_PinState PinState)
 /* param state, ON or Off  */
 void BSP_setLED(uint8_t led, uint8_t state)
 {
-	BSP_setGPIO(GPIOF_AHB, led, state);
+    BSP_setGPIO(GPIOF_AHB, led, state);
 }
