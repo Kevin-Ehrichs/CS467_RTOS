@@ -6,18 +6,11 @@
 
 void BSP_init(void) {
 	
-	
-#ifdef unicornRTOS
-		__asm("CPSID I"); //disable interrupts
-#endif	
-	
-		/* 
-	     Goal is to have available, extra GPIO to be used for logic analyzer testing.
+		/* Goal is to have available, extra GPIO to be used for logic analyzer testing.
 	     The GPIOs located on J4 Connector of TivaC are marked as digital GPIO and  all
 	     having interrupt capability. The selection was also used, as these pins do
 	     not share any common functionality such as serial communication or Analog ability
-	     This selection allows for the most flexibility in terms of future developement 
-	  */
+	     This selection allows for the most flexibility in terms of future developement */
 	
 		/* Enable Run mode for the following GPIO Rails */
 	  /* TM4C123GXL_datasheet - pg. 340 - Register 60 - General-Purpose Input/Output Run Mode Clock Gating Control (RCGCGPIO) */
@@ -43,34 +36,12 @@ void BSP_init(void) {
 		GPIOB_AHB->DEN |= (GPIO_PB3);                                  /* Enable GPIOs used in B rail */
 		GPIOC_AHB->DEN |= (GPIO_PC4 | GPIO_PC5 | GPIO_PC6 | GPIO_PC7); /* Enable GPIOs used in C rail */
 		GPIOD_AHB->DEN |= (GPIO_PD6 | GPIO_PD7);                       /* Enable GPIOs used in D rail */
-		
-#ifdef unicornRTOS
-		//systick stuff
-    // register abstractions in core_cm4h.h (CMSIS directory)
-    SysTick->LOAD = (uint32_t)1000000U;
-    SysTick->VAL  = 0U;                          //clear on write (so clears the counter value)
-    SysTick->CTRL = (uint32_t)0b00000111U;    //clock source, interrupt enable, counter enable in 'multi-shot' (repeating mode)
-		
-    //exception handler preemption priorty stuff
-    NVIC_SetPriority(SysTick_IRQn, 0U); // set Systick to higherst priority
-  
-  
-    //has the effect of setting pendsv to lowest priorty, 
-    // RESERVED, and monitor interrupts to highest priority
-    // *** couldn't find the TM4c123GH6PM.h equivalent of this lm4f120h5qr.h register abstraction, so I hardcoded it
-      // NVIC_SYS_PRI3_R = 0x00FF0000U; 
-    // sets PendSV interrupt priority to less than Systick, thus allowing Systic to exit and then enter PendSV
-    (*((volatile unsigned long *)0xE000ED20)) = 0x00FF0000U;
-#endif
 
-#ifdef freeRTOS
     SystemCoreClockUpdate();
     SysTick_Config(SystemCoreClock / BSP_TICKS_PER_SEC);
 
     __enable_irq();
-#endif
 }
-
 
 /* Abstraction for setting the state of a GPIO on the TivaC Launchpad Board */
 /* param GPIOx, the GPIO typedef ex. GPIOF_AHB                              */
