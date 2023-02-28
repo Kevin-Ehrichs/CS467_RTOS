@@ -399,6 +399,16 @@
               <FileType>5</FileType>
               <FilePath>.\bsp.h</FilePath>
             </File>
+            <File>
+              <FileName>UserTasks.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\UserTasks.c</FilePath>
+            </File>
+            <File>
+              <FileName>UserTasks.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\UserTasks.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

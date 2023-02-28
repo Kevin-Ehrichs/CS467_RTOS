@@ -10,78 +10,27 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include "bsp.h"
-
-#define GPIO_PORTF_DATA_R (*(( volatile unsigned long *)0x40025038 ) ) 
-
-/**** TASK DEFINITIONS ****/
-
-
-/* Blink red LED - 1 second intervals */
-void redLEDTask(void *pvParameters)
-{
-	/* Establish the task's period.*/
-	const TickType_t xDelay = pdMS_TO_TICKS(10);
-	TickType_t xLastWakeTime = xTaskGetTickCount();
-	
-	for (;;) {
-		BSP_setGPIO(GPIOB_AHB, GPIO_PB3, HIGH); /**SIGNAL TO LA */
-		//BSP_setLED(LED_RED, ON);
-		//xTaskDelayUntil(&xLastWakeTime, xDelay);
-
-		//BSP_setLED(LED_RED, OFF);
-		//xTaskDelayUntil(&xLastWakeTime, xDelay);
-		BSP_setGPIO(GPIOB_AHB, GPIO_PB3, LOW); /**SIGNAL TO LA */
-	}
-}	
-
-/* Blink blue LED - 1 second intervals */
-void blueLEDTask(void *pvParameters)
-{
-	
-	/* Establish the task's period.*/
-	const TickType_t xDelay = pdMS_TO_TICKS(1000);
-	TickType_t xLastWakeTime = xTaskGetTickCount();
-	
-	for (;;) {
-		BSP_setGPIO(GPIOB_AHB, GPIO_PB3, HIGH); /**SIGNAL TO LA */
-		//BSP_setLED(LED_BLUE, ON);
-		//xTaskDelayUntil(&xLastWakeTime, xDelay);
-		
-		//BSP_setLED(LED_BLUE, OFF);
-		BSP_setGPIO(GPIOB_AHB, GPIO_PB3, LOW); /**SIGNAL TO LA */
-		//xTaskDelayUntil(&xLastWakeTime, xDelay);
-	}
-}	
-
-/* Blink green LED - 1 second intervals */
-void greenLEDTask(void *pvParameters)
-{
-	
-	/* Establish the task's period.*/
-	const TickType_t xDelay = pdMS_TO_TICKS(10);
-	TickType_t xLastWakeTime = xTaskGetTickCount();
-	
-	for (;;) {
-		BSP_setGPIO(GPIOC_AHB, GPIO_PC4, HIGH); /**SIGNAL TO LA */
-		//BSP_setLED(LED_GREEN, ON);
-		//xTaskDelayUntil(&xLastWakeTime, xDelay);
-		
-		//BSP_setLED(LED_GREEN, OFF);
-		//xTaskDelayUntil(&xLastWakeTime, xDelay);
-		BSP_setGPIO(GPIOC_AHB, GPIO_PC4, LOW); /**SIGNAL TO LA */
-	}
-}	
+#include "UserTasks.h"
 
 
 int main()
 {
-	/* Need to understand usStackDepth and how much we really need */
-	/* 32 seems to be minimum for current task implementation      */
-	//xTaskCreate(redLEDTask, "RED LED", 32, NULL, 1, NULL);
 	
-	xTaskCreate(blueLEDTask, "BLUE LED", 32, NULL, 1, NULL);
+	/* 
+	  About usStackDepth param - Each task has it's own stack - the usStackDepth parameter
+	                              will define the size of the stack in words. In a later release, 
+                                the program could use the function: uxTaskGetStackHighWaterMark 
+																during runtime to programmatically infer the remaining memory
+																stack available and adjust the tasks appropriately. 
 	
-	xTaskCreate(greenLEDTask, "GREEN LED", 32, NULL, 1, NULL);
+		Solution for now is to assign the minimum number possible without crashing - perhaps we can pad this number for safety
+		usStackDepth defined in multiples of 8 
+	*/	
+	xTaskCreate(UserTask1, "Toggle PB3 Pin", 32, NULL, 1, NULL);
+	
+	xTaskCreate(UserTask2, "Toggle PC4 Pin", 32, NULL, 1, NULL);
+	
+	xTaskCreate(UserTask3, "Toggle PC5 Pin", 32, NULL, 1, NULL);
 	
 	
 	/* Initialize board level components inlcuding GPIO */

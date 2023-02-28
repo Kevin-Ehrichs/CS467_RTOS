@@ -36,7 +36,8 @@ void BSP_init(void) {
 		GPIOB_AHB->DEN |= (GPIO_PB3);                                  /* Enable GPIOs used in B rail */
 		GPIOC_AHB->DEN |= (GPIO_PC4 | GPIO_PC5 | GPIO_PC6 | GPIO_PC7); /* Enable GPIOs used in C rail */
 		GPIOD_AHB->DEN |= (GPIO_PD6 | GPIO_PD7);                       /* Enable GPIOs used in D rail */
-
+				
+		
     SystemCoreClockUpdate();
     SysTick_Config(SystemCoreClock / BSP_TICKS_PER_SEC);
 
