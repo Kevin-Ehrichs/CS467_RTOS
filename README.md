@@ -13,7 +13,7 @@
         - system_TM4C123.h
 
   2. port.c - Added assembly in PendSV and BSP calls to SysTick
-    - This file is included in the Keil RTOS software pack
+    - This file is included in the Keil RTOS software pack but needs to be replaced by the custom version
         - After downloading this source, ensure the project compiles with use of the original port.c file, then replace it in your filesystem with the version included in the root of this repository.
 
 
