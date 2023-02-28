@@ -23,9 +23,17 @@ void extraGPIOTask(void *pvParameters)
 	for (;;) {
 		
 		BSP_setGPIO(GPIOB_AHB, GPIO_PB3, HIGH);
+		BSP_setGPIO(GPIOC_AHB, GPIO_PC4, HIGH);
+		BSP_setGPIO(GPIOC_AHB, GPIO_PC5, HIGH);
+		BSP_setGPIO(GPIOC_AHB, GPIO_PC6, HIGH);
+		BSP_setGPIO(GPIOC_AHB, GPIO_PC7, HIGH);
 		vTaskDelayUntil(&xLastWakeTime, xDelay);
 
-    BSP_setGPIO(GPIOB_AHB, GPIO_PB3, LOW);
+		BSP_setGPIO(GPIOB_AHB, GPIO_PB3, LOW);
+		BSP_setGPIO(GPIOC_AHB, GPIO_PC4, LOW);
+		BSP_setGPIO(GPIOC_AHB, GPIO_PC5, LOW);
+		BSP_setGPIO(GPIOC_AHB, GPIO_PC6, LOW);
+		BSP_setGPIO(GPIOC_AHB, GPIO_PC7, LOW);
 		vTaskDelayUntil(&xLastWakeTime, xDelay);
 	}
 }
