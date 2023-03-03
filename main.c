@@ -10,9 +10,12 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include "bsp.h"
+#include "UserTasks.h"
 
-/**** TASK DEFINITIONS ****/
 
+<<<<<<< HEAD
+int main()
+=======
 /* Toggle the PB3 pin at 3 second intervals */
 void extraGPIOTask(void *pvParameters)
 {
@@ -75,36 +78,29 @@ void blueLEDTask(void *pvParameters)
 
 /* Blink green LED - 1 second intervals */
 void greenLEDTask(void *pvParameters)
+>>>>>>> 9a9e628c91b2b1c6dee3229f1d32255d4a35e040
 {
 	
-	/* Establish the task's period.*/
-	const TickType_t xDelay = pdMS_TO_TICKS(1000);
-	TickType_t xLastWakeTime = xTaskGetTickCount();
+	/* 
+	  About usStackDepth param - Each task has it's own stack - the usStackDepth parameter
+	                              will define the size of the stack in words. In a later release, 
+                                the program could use the function: uxTaskGetStackHighWaterMark 
+																during runtime to programmatically infer the remaining memory
+																stack available and adjust the tasks appropriately. 
 	
-	for (;;) {
-		BSP_setLED(LED_GREEN, ON);
-		vTaskDelayUntil(&xLastWakeTime, xDelay);
-		
-		BSP_setLED(LED_GREEN, OFF);
-		vTaskDelayUntil(&xLastWakeTime, xDelay);
-	}
-}	
-
-
-int main()
-{
-	/* Need to understand usStackDepth and how much we really need */
-	/* 32 seems to be minimum for current task implementation      */
-	xTaskCreate(redLEDTask, "RED LED", 32, NULL, 1, NULL);
+		Solution for now is to assign the minimum number possible without crashing - perhaps we can pad this number for safety
+		usStackDepth defined in multiples of 8 
+	*/	
+	xTaskCreate(UserTask1, "Toggle PB3 Pin", 32, NULL, 1, NULL);
 	
-	xTaskCreate(blueLEDTask, "BLUE LED", 32, NULL, 1, NULL);
+	xTaskCreate(UserTask2, "Toggle PC4 Pin", 32, NULL, 1, NULL);
 	
-	xTaskCreate(greenLEDTask, "GREEN LED", 32, NULL, 1, NULL);
+	xTaskCreate(UserTask3, "Toggle PC5 Pin", 32, NULL, 1, NULL);
 	
-	xTaskCreate(extraGPIOTask, "Extra GPIO", 32, NULL, 1, NULL);
 	
 	/* Initialize board level components inlcuding GPIO */
 	BSP_init();
+	
 
 	/* Startup of the FreeRTOS scheduler.  The program should block here.  */
 	vTaskStartScheduler();

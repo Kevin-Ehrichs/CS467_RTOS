@@ -36,11 +36,98 @@ void BSP_init(void) {
 		GPIOB_AHB->DEN |= (GPIO_PB3);                                  /* Enable GPIOs used in B rail */
 		GPIOC_AHB->DEN |= (GPIO_PC4 | GPIO_PC5 | GPIO_PC6 | GPIO_PC7); /* Enable GPIOs used in C rail */
 		GPIOD_AHB->DEN |= (GPIO_PD6 | GPIO_PD7);                       /* Enable GPIOs used in D rail */
-
+				
+		
     SystemCoreClockUpdate();
     SysTick_Config(SystemCoreClock / BSP_TICKS_PER_SEC);
 
     __enable_irq();
+		
+		init_UART();
+		
+		UART5_SendString("Unicorns Rule \n");
+}
+
+/* Function for sending entire strings */
+void UART5_SendString(char *str)
+{
+  while(*str)
+	{
+		UART5_SendByte(*(str++));
+	}
+}
+
+/* Function for sending one byte at a time */
+void UART5_SendByte(char data)  
+{
+    while((UART5->FR & 0x20) != 0); 	 /* wait until Tx buffer not full */
+    UART5->DR = data;                  /* before giving it another byte */
+}
+
+
+/*
+	TM4C123GH6PM has 7 total UART peripherals
+  Here we will use UART 2 connected to pins PE5(Tx) and PE7(Rx) 
+
+	The following UART configuration was prepared by following the tutorial listed below
+	https://microcontrollerslab.com/uart-communication-tm4c123-tiva-c-launchpad/
+*/
+
+
+
+/*
+	Baud Rate Setup - Baud rate is the rate at which the data will traverse the pin
+									- Both transmit and receive need to agree on the same baud
+
+	In the TM4C123GH6PM, there are two registers that dictate the baud rate:
+		- UARTIBRD - Integer Baud Rate Divisor
+		- UARTFBRD - Fractional Baud Rate Divisor
+
+	Steps to calculate baud rate register values
+	1. Obtain System clock speed
+	2. Use the following equation to calculate UARTIBRD integer value based on baud rate selection
+		 UART Baud Rate =  ( SystemCoreClock / 16 x UARTIBRD) 
+   
+		 Example: for a baud rate of 9600 and SystemCoreClock of 50MHz
+
+			9600 = (50MHz / 16 x UARTIBRD)
+			or
+			UARTIBRD = 3125000 / 9600
+			then 
+			UARTIBRD = 325.5208333
+
+	3. Take note of the integer portion and the decimal portion of the result
+			integer portion - 325
+			decimal portion - 0.5208333
+	 
+	4. The UARTIBRD should only be written with the integer portion
+			Then: UARTIBRD = 325
+
+	5. The decimal portion should then be fed into the following calculation to determine the value for UARTFBRD
+			Decimal Portion x 64 + 0.5 = UARTFBRD
+			then
+			0.5208333 x 64 + 0.5 = 33.8333312
+			then the UARTFBRD will only use the integer portion of the result above. 
+			UARTFBRD = 33
+*/
+void init_UART(void)
+{
+	  SYSCTL->RCGCUART |= 0x20;  /* enable clock to UART5 */
+    SYSCTL->RCGCGPIO |= 0x10;  /* enable clock to PORTE for PE4/Rx and RE5/Tx */
+	
+    /* UART5 initialization */
+    UART5->CTL = 0;         /* UART5 module disbable */
+    UART5->IBRD = 325;      /* for 9600 baud rate, integer = 325 */
+    UART5->FBRD = 33;       /* for 9600 baud rate, fractional = 33*/
+    UART5->CC = 0;          /*select system clock*/
+    UART5->LCRH = 0x60;     /* data lenght 8-bit, not parity bit, no FIFO */
+    UART5->CTL = 0x301;     /* Enable UART5 module, Rx and Tx */
+
+    /* UART5 TX5 and RX5 use PE4 and PE5. Configure them digital and enable alternate function */
+    GPIOE->DEN = 0x30;      /* set PE4 and PE5 as digital */
+    GPIOE->AFSEL = 0x30;    /* Use PE4,PE5 alternate function */
+    GPIOE->AMSEL = 0;    /* Turn off analg function*/
+    GPIOE->PCTL = 0x00110000;     /* configure PE4 and PE5 for UART */
 }
 
 /* Abstraction for setting the state of a GPIO on the TivaC Launchpad Board */

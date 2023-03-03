@@ -1,0 +1,1 @@
+automated start timer in bsp

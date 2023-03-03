@@ -62,4 +62,9 @@ void BSP_init(void);
 void BSP_setGPIO(GPIOA_Type* GPIOx, uint8_t Pin, GPIO_PinState PinState);
 void BSP_setLED(uint8_t led, uint8_t state);
 
+void UART5_SendString(char *str);
+void UART5_SendByte(char data);
+void Delay(unsigned long counter);
+void init_UART(void);
+
 #endif // __BSP_H__

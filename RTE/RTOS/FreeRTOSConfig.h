@@ -46,6 +46,9 @@
 
 extern uint32_t SystemCoreClock;
 
+/* Uncomment to use uxTaskGetStackHighWaterMark */
+//#define configGENERATE_RUN_TIME_STATS 
+
 #define configCPU_CLOCK_HZ                    (SystemCoreClock)
 #define configTICK_RATE_HZ                    ((TickType_t)1000)
 #define configTOTAL_HEAP_SIZE                 ((size_t)(4096))

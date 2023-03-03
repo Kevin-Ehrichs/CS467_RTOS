@@ -1,6 +1,7 @@
---cpu=Cortex-M4.fp.sp
+--cpu=Cortex-M4 --fpu=SoftVFP
 ".\objects\main.o"
 ".\objects\bsp.o"
+".\objects\usertasks.o"
 ".\objects\startup_tm4c123.o"
 ".\objects\system_tm4c123.o"
 ".\objects\freertos_evr.o"
