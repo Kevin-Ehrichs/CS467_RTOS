@@ -13,72 +13,7 @@
 #include "UserTasks.h"
 
 
-<<<<<<< HEAD
 int main()
-=======
-/* Toggle the PB3 pin at 3 second intervals */
-void extraGPIOTask(void *pvParameters)
-{
-		/* Establish the task's period.*/
-	const TickType_t xDelay = pdMS_TO_TICKS(3000);
-	TickType_t xLastWakeTime = xTaskGetTickCount();
-	
-	for (;;) {
-		
-		BSP_setGPIO(GPIOB_AHB, GPIO_PB3, HIGH);
-		BSP_setGPIO(GPIOC_AHB, GPIO_PC4, HIGH);
-		BSP_setGPIO(GPIOC_AHB, GPIO_PC5, HIGH);
-		BSP_setGPIO(GPIOC_AHB, GPIO_PC6, HIGH);
-		BSP_setGPIO(GPIOC_AHB, GPIO_PC7, HIGH);
-		vTaskDelayUntil(&xLastWakeTime, xDelay);
-
-		BSP_setGPIO(GPIOB_AHB, GPIO_PB3, LOW);
-		BSP_setGPIO(GPIOC_AHB, GPIO_PC4, LOW);
-		BSP_setGPIO(GPIOC_AHB, GPIO_PC5, LOW);
-		BSP_setGPIO(GPIOC_AHB, GPIO_PC6, LOW);
-		BSP_setGPIO(GPIOC_AHB, GPIO_PC7, LOW);
-		vTaskDelayUntil(&xLastWakeTime, xDelay);
-	}
-}
-
-/* Blink red LED - 1 second intervals */
-void redLEDTask(void *pvParameters)
-{
-	
-	/* Establish the task's period.*/
-	const TickType_t xDelay = pdMS_TO_TICKS(1000);
-	TickType_t xLastWakeTime = xTaskGetTickCount();
-	
-	for (;;) {
-		
-		BSP_setLED(LED_RED, ON);
-		vTaskDelayUntil(&xLastWakeTime, xDelay);
-
-		BSP_setLED(LED_RED, OFF);
-		vTaskDelayUntil(&xLastWakeTime, xDelay);
-	}
-}	
-
-/* Blink blue LED - 1 second intervals */
-void blueLEDTask(void *pvParameters)
-{
-	
-	/* Establish the task's period.*/
-	const TickType_t xDelay = pdMS_TO_TICKS(1000);
-	TickType_t xLastWakeTime = xTaskGetTickCount();
-	
-	for (;;) {
-		BSP_setLED(LED_BLUE, ON);
-		vTaskDelayUntil(&xLastWakeTime, xDelay);
-		
-		BSP_setLED(LED_BLUE, OFF);
-		vTaskDelayUntil(&xLastWakeTime, xDelay);
-	}
-}	
-
-/* Blink green LED - 1 second intervals */
-void greenLEDTask(void *pvParameters)
->>>>>>> 9a9e628c91b2b1c6dee3229f1d32255d4a35e040
 {
 	
 	/* 
