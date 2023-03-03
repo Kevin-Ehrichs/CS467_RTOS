@@ -5,10 +5,6 @@
 #include <stdint.h>  /* Standard integers. WG14/N843 C99 Standard */
 #include "TM4C123GH6PM.h" /* the TM4C MCU Peripheral Access Layer (TI) */
 
-/* uncomment the RTOS implementation that the file is being used in */
-#define freeRTOS
-//#define unicornRTOS
-
 /* system clock tick [Hz] */
 #define BSP_TICKS_PER_SEC 1000U
 
