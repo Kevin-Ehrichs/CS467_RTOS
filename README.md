@@ -24,12 +24,13 @@
 | Pin Name | Direction | Function |
 | -------- | -------- | -------- |
 | PF1 | Output | Red LED |
-| PF2 | Output | Blue LED and PendSV Signal to LA |
-| PF3 | Output | Green LED and SysTick Signal to LA |
-| PB3 | Output | Task 1 signal to LA |
-| PC4 | Output | Task 2 signal to LA |
-| PC5 | Output | Task 3 signal to LA |
-| PC6 | Output  | Available |
-| PC7 | Output | Available|
-| PD6 | Output | Available |
-| PD7 | Output | Available |
+| PF2 | Output | Blue LED |
+| PF3 | Output | Green LED |
+| PB3 | Output | PendSV Signal to LA |
+| PC4 | Output | SysTick Signal to LA |
+| PC5 | Output | Task 1 Signal to LA |
+| PC6 | Input  | Task 2 Signal to LA  |
+| PC7 | Output | Task 3 Signal to LA  |
+| PD6 | Output | Extra |
+| PD7 | Output | Extra |
+| PE5 | Output | UART Tx Line |
